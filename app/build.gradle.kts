@@ -54,4 +54,14 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation ("androidx.activity:activity-ktx:1.8.0")
+
+//    implementation ("com.github.bumptech.glide:glide:4.16.0")
+//    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+
+    implementation ("androidx.room:room-runtime:2.3.0")
+//    kapt ("androidx.room:room-compiler:2.3.0")
+    implementation ("androidx.room:room-ktx:2.3.0")
 }
