@@ -26,8 +26,8 @@ import com.example.siapp.View.Adapter.ImageAdapter
 import com.example.siapp.ViewModel.ImageViewModel
 import com.example.siapp.ViewModel.MainViewModel
 import com.example.siapp.ViewModel.MainViewModelFactory
-import kotlin.math.log
-
+import com.example.siapp.util.LoadingDialog
+import android.view.WindowManager
 class MainActivity2 : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(ImageRepository())
@@ -38,7 +38,7 @@ class MainActivity2 : AppCompatActivity() {
 
     private lateinit var recyclerView : RecyclerView
     private lateinit var searchView :SearchView
-
+    private val loading = LoadingDialog(this)
     private var oldquery:String=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +49,10 @@ class MainActivity2 : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+//====================================================================================================
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = resources.getColor(R.color.purple_500)
+
 //====================================================================================================
         recyclerView = findViewById(R.id.recyclerView)
         searchView = findViewById(R.id.search_view)
@@ -101,6 +105,7 @@ class MainActivity2 : AppCompatActivity() {
         viewModel.searchImages(query).observe(this, Observer { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
+                    loading.isDismiss()
                     resource.data?.let { handleApiResponse(it) }
                 }
                 Status.ERROR -> {
@@ -108,6 +113,7 @@ class MainActivity2 : AppCompatActivity() {
                 }
                 Status.LOADING -> {
                     Log.d("MainActivity2", "Loading...")
+                    loading.startLoading()
                 }
             }
         })
