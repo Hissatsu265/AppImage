@@ -1,6 +1,8 @@
 package com.example.siapp.View
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -38,6 +40,10 @@ class MainActivity2 : AppCompatActivity() {
 
     private lateinit var recyclerView : RecyclerView
     private lateinit var searchView :SearchView
+
+    private lateinit var url_list:ArrayList<String>
+    private lateinit var img_list:ArrayList<String>
+
     private val loading = LoadingDialog(this)
     private var oldquery:String=""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,16 +55,34 @@ class MainActivity2 : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        img_list=ArrayList()
+        url_list=ArrayList()
 //====================================================================================================
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = resources.getColor(R.color.purple_500)
-
 //====================================================================================================
         recyclerView = findViewById(R.id.recyclerView)
         searchView = findViewById(R.id.search_view)
+//====================================================================================================
+        adapter = ImageAdapter { position ->
+//            val intent = Intent(this, Image_Info::class.java)
+//            intent.putParcelableArrayListExtra("images", viewModelImage.images.value)
+//            intent.putExtra("position", position)
+//            startActivity(intent)
+            val intent = Intent(this, Image_Info::class.java)
 
-        adapter = ImageAdapter()
+            intent.putExtra("position", position)
+            intent.putStringArrayListExtra("urlList", url_list)
+            intent.putStringArrayListExtra("imgList", img_list)
+
+            startActivity(intent)
+        }
         recyclerView.adapter = adapter
+//        adapter = ImageAdapter()
+//        recyclerView.adapter = adapter
+//====================================================================================================
+
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         viewModelImage = ViewModelProvider(this).get(ImageViewModel::class.java)
@@ -120,8 +144,13 @@ class MainActivity2 : AppCompatActivity() {
     }
     private fun handleApiResponse(data: ApiResponse) {
         val images = data.images
-        Log.d("TAGingi", "handleApiResponse: "+ data.searchParameters.toString())
+//        Log.d("TAGingi", "handleApiResponse: "+ data.searchParameters.toString())
+
+        img_list.clear()
+        url_list.clear()
         for (image in images) {
+            img_list.add(image.imageUrl)
+            url_list.add(image.link)
             Log.d("Image Info", "Title: ${image.title}, URL: ${image.imageUrl}")
         }
 //=================================================================================
@@ -151,8 +180,5 @@ class MainActivity2 : AppCompatActivity() {
         catch (e:Exception){
             Log.d("Tagloii1",e.message.toString())
         }
-    }
-    private fun ShowAlert(s:String){
-        Toast.makeText(this,s,Toast.LENGTH_SHORT).show()
     }
 }

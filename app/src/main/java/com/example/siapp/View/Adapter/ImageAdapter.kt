@@ -13,7 +13,8 @@ import com.bumptech.glide.Glide
 import com.example.siapp.Model.ApiResponse
 import com.example.siapp.Model.Image
 import com.example.siapp.R
-class ImageAdapter : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+class ImageAdapter (private val onItemClick: (Int) -> Unit)
+    : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     private val images = mutableListOf<Image>()
 
@@ -29,7 +30,7 @@ class ImageAdapter : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_image, parent, false)
-        return ImageViewHolder(view)
+        return ImageViewHolder(view,onItemClick)
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
@@ -38,7 +39,7 @@ class ImageAdapter : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     override fun getItemCount(): Int = images.size
 
-    class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ImageViewHolder(itemView: View,private val onItemClick: (Int) -> Unit) : RecyclerView.ViewHolder(itemView) {
         private val title: TextView = itemView.findViewById(R.id.titleView)
         private val imageView: ImageView = itemView.findViewById(R.id.imageView)
 
@@ -52,6 +53,10 @@ class ImageAdapter : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
             catch (e:Exception){
                 Log.d("Tagloii2",e.message.toString())
             }
+            itemView.setOnClickListener {
+                onItemClick(adapterPosition)
+            }
+//            ViewCompat.setTransitionName(imageView, image.imageUrl)
         }
     }
 }
