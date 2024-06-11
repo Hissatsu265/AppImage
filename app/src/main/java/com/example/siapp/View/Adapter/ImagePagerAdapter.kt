@@ -10,6 +10,8 @@ import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.example.siapp.Model.Image
 import com.example.siapp.R
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+
 class ImagePagerAdapter (private val context: Context, private val images: List<String>) : PagerAdapter() {
 
     override fun getCount(): Int {
@@ -30,6 +32,7 @@ class ImagePagerAdapter (private val context: Context, private val images: List<
 
         Glide.with(context)
             .load(images[position])
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)
 
         container.addView(view)

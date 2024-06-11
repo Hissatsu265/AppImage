@@ -10,7 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.siapp.Model.ApiResponse
 import com.example.siapp.Model.Image
 import com.example.siapp.R
@@ -49,6 +49,7 @@ class ImageAdapter (private val onItemClick: (Int, ImageView) -> Unit)
                 title.text = image.title
                 Glide.with(itemView.context)
                     .load(image.imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView)
             }
             catch (e:Exception){
