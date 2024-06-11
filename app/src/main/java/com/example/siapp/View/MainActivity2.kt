@@ -3,6 +3,7 @@ package com.example.siapp.View
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.transition.TransitionInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,6 +20,7 @@ import com.example.siapp.Repository.ImageRepository
 import com.example.siapp.util.Status
 
 import android.util.Log
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +32,9 @@ import com.example.siapp.ViewModel.MainViewModel
 import com.example.siapp.ViewModel.MainViewModelFactory
 import com.example.siapp.util.LoadingDialog
 import android.view.WindowManager
+import android.widget.ImageView
+import androidx.core.app.ActivityOptionsCompat
+
 class MainActivity2 : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(ImageRepository())
@@ -64,23 +69,25 @@ class MainActivity2 : AppCompatActivity() {
 //====================================================================================================
         recyclerView = findViewById(R.id.recyclerView)
         searchView = findViewById(R.id.search_view)
+        val Imagescreen= findViewById<ImageView>(R.id.img_main)
 //====================================================================================================
-        adapter = ImageAdapter { position ->
-//            val intent = Intent(this, Image_Info::class.java)
-//            intent.putParcelableArrayListExtra("images", viewModelImage.images.value)
-//            intent.putExtra("position", position)
-//            startActivity(intent)
+        adapter = ImageAdapter { position, imageView ->
+
             val intent = Intent(this, Image_Info::class.java)
 
             intent.putExtra("position", position)
             intent.putStringArrayListExtra("urlList", url_list)
             intent.putStringArrayListExtra("imgList", img_list)
 
-            startActivity(intent)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                imageView,
+                ViewCompat.getTransitionName(imageView) ?: ""
+            )
+
+            startActivity(intent, options.toBundle())
         }
         recyclerView.adapter = adapter
-//        adapter = ImageAdapter()
-//        recyclerView.adapter = adapter
 //====================================================================================================
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -91,6 +98,8 @@ class MainActivity2 : AppCompatActivity() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 try {
                     if (query!=oldquery) {
+
+                        Imagescreen.visibility=View.GONE
                         oldquery=query.toString().trim()
                         adapter.submitList(emptyList())
                         viewModelImage.clearImages()
@@ -111,7 +120,7 @@ class MainActivity2 : AppCompatActivity() {
         try {
             viewModelImage.images.observe(this, Observer {
                 it?.let { newImages ->
-                    adapter.submitList(newImages, clearExisting = true) // Clear existing items
+                    adapter.submitList(newImages, clearExisting = true)
                 }
             })
         }
@@ -121,8 +130,13 @@ class MainActivity2 : AppCompatActivity() {
 //===================đặt scroll pagging=================================================================================
 
         setupRecyclerViewPagination(recyclerView)
-
 //====================================================================================================
+//        try {
+//            window.sharedElementEnterTransition = TransitionInflater.from(this).inflateTransition(R.transition.image_transition)
+//            window.sharedElementReturnTransition = TransitionInflater.from(this).inflateTransition(R.transition.image_transition)
+//        }catch (e:Exception){
+//            Log.d("TAGloiiiiiii5", "handleApiResponse: "+e.message.toString())
+//        }
 
     }
     private fun Query(query:String){
@@ -144,8 +158,6 @@ class MainActivity2 : AppCompatActivity() {
     }
     private fun handleApiResponse(data: ApiResponse) {
         val images = data.images
-//        Log.d("TAGingi", "handleApiResponse: "+ data.searchParameters.toString())
-
         img_list.clear()
         url_list.clear()
         for (image in images) {
@@ -154,16 +166,7 @@ class MainActivity2 : AppCompatActivity() {
             Log.d("Image Info", "Title: ${image.title}, URL: ${image.imageUrl}")
         }
 //=================================================================================
-//        try {
             viewModelImage.setInitialImages(data.images)
-//
-//            viewModelImage.images.observe(this, Observer {
-//                adapter.submitList(data.images,true)
-//            })
-//        }
-//        catch (e:Exception){
-//            Log.d("TAGloiiiiiii5", "handleApiResponse: "+e.message.toString())
-//        }
     }
     private fun setupRecyclerViewPagination(recyclerView: RecyclerView) {
         try {

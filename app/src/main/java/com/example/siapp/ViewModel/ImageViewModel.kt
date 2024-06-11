@@ -13,7 +13,7 @@ class ImageViewModel : ViewModel() {
     val images: LiveData<List<Image>> get() = _images
 
     private var currentPage = 0
-    private val pageSize = 3
+    private val pageSize = 4
     private var allImages: List<Image> = emptyList()
     private var isLoading = false
     fun setInitialImages(initialImages: List<Image>) {
@@ -37,10 +37,10 @@ class ImageViewModel : ViewModel() {
                         allImages.subList(startIndex, endIndex.coerceAtMost(allImages.size))
                     currentPage++
                     _images.value = _images.value.orEmpty() + nextPageImages
-                    Log.d("TAGhhhhhhh", "loadMoreImages: "+ currentPage)
-                    Log.d("TAGhhhhhhh1", "loadMoreImages: "+ startIndex)
-                    Log.d("TAGhhhhhhh2", "loadMoreImages: "+ _images.value.toString())
-                    Log.d("TAGhhhhhhh3", "loadMoreImages: "+ _images.value!!.size.toString())
+//                    Log.d("TAGhhhhhhh", "loadMoreImages: "+ currentPage)
+//                    Log.d("TAGhhhhhhh1", "loadMoreImages: "+ startIndex)
+//                    Log.d("TAGhhhhhhh2", "loadMoreImages: "+ _images.value.toString())
+//                    Log.d("TAGhhhhhhh3", "loadMoreImages: "+ _images.value!!.size.toString())
                 }
             }
             isLoading=false

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.ViewCompat
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.example.siapp.Model.Image
@@ -23,6 +24,9 @@ class ImagePagerAdapter (private val context: Context, private val images: List<
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.item_image_fullscreen, container, false)
         val imageView: ImageView = view.findViewById(R.id.imageView)
+
+        val imageUrl = images[position]
+        ViewCompat.setTransitionName(imageView, imageUrl)
 
         Glide.with(context)
             .load(images[position])

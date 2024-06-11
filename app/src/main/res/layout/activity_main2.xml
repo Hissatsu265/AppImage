@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View.MainActivity2"
+    android:background="@color/white"
     android:orientation="vertical">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -42,7 +43,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_margin="10dp"
+        android:layout_margin="18dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="25dp"
         app:cardElevation="12px">
@@ -52,6 +53,14 @@
             android:id="@+id/search_view"
             />
     </androidx.cardview.widget.CardView>
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:id="@+id/img_main"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/mainscreen_search"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
