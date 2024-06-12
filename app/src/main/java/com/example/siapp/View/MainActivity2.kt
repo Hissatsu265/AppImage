@@ -34,10 +34,16 @@ import com.example.siapp.util.LoadingDialog
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
+import com.example.siapp.Repository.CacheRepository
+import com.example.siapp.ViewModel.ViewModelCache
+import com.example.siapp.ViewModel.ViewModelCacheFactory
 
 class MainActivity2 : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(ImageRepository())
+    }
+    private val viewModelCache: ViewModelCache by viewModels {
+        ViewModelCacheFactory(CacheRepository(this))
     }
 
     private lateinit var viewModelImage: ImageViewModel
@@ -99,11 +105,13 @@ class MainActivity2 : AppCompatActivity() {
                 try {
                     if (query!=oldquery) {
 
+                        val kt:Boolean= viewModelCache.checkQuery(query)
+
                         Imagescreen.visibility=View.GONE
                         oldquery=query.toString().trim()
                         adapter.submitList(emptyList())
                         viewModelImage.clearImages()
-                        Query(query.toString().trim())
+                        Query(query.toString().trim(),kt)
 //                        setupRecyclerViewPagination(recyclerView)
                     }
 
@@ -139,11 +147,18 @@ class MainActivity2 : AppCompatActivity() {
 //        }
 
     }
-    private fun Query(query:String){
+    private fun Query(query:String, kt:Boolean=false){
+        if(kt){
+            handleApiResponse(viewModelCache.Take_Apiresponse(query))
+            return
+        }
         viewModel.searchImages(query).observe(this, Observer { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
                     loading.isDismiss()
+                    //Luu data vao cache----------------
+                    resource.data?.let { viewModelCache.saveData(it.images,query) }
+                    //------------------------
                     resource.data?.let { handleApiResponse(it) }
                 }
                 Status.ERROR -> {
