@@ -181,7 +181,7 @@ class MainActivity2 : AppCompatActivity() {
             Log.d("Image Info", "Title: ${image.title}, URL: ${image.imageUrl}")
         }
 //=================================================================================
-            viewModelImage.setInitialImages(data.images)
+        viewModelImage.setInitialImages(data.images)
     }
     private fun setupRecyclerViewPagination(recyclerView: RecyclerView) {
         try {

@@ -16,7 +16,7 @@ class ViewModelCache(private val cacheRepository: CacheRepository) : ViewModel()
 
     fun checkQuery(query: String?):Boolean {
         if (query==null) return false
-        val variableString = cacheRepository.getVariableString(query)
+        val variableString = cacheRepository.getVariableString(query.trim())
         if(variableString != null){
             return true
         }
@@ -34,11 +34,11 @@ class ViewModelCache(private val cacheRepository: CacheRepository) : ViewModel()
             list3.add(img.title)
             list1.add(img.link)
         }
-        Log.d("TAGcache", "saveData: "+list3.toString())
-        Log.d("TAGcache", "saveData: "+list2.toString())
-        Log.d("TAGcache", "saveData: "+list1.toString())
-        Log.d("TAGcache", "saveData: "+variableString)
-        Log.d("TAGcache", "saveData: ===========")
+//        Log.d("TAGcache", "saveData: "+list3.toString())
+//        Log.d("TAGcache", "saveData: "+list2.toString())
+//        Log.d("TAGcache", "saveData: "+list1.toString())
+//        Log.d("TAGcache", "saveData: "+variableString)
+//        Log.d("TAGcache", "saveData: ===========")
         cacheRepository.saveToCache(list1, list2,list3, variableString)
     }
     fun Take_Apiresponse(s:String):ApiResponse{
@@ -46,11 +46,11 @@ class ViewModelCache(private val cacheRepository: CacheRepository) : ViewModel()
         val urls:List<String> = cacheRepository.getlist_url(s)
         val titles:List<String> = cacheRepository.getlist_title(s)
 
-        Log.d("TAGcache1", "saveData: "+titles.toString())
-        Log.d("TAGcache1", "saveData: "+imgs.toString())
-        Log.d("TAGcache1", "saveData: "+urls.toString())
-        Log.d("TAGcache1", "saveData: "+s)
-        Log.d("TAGcache1", "saveData: ===========")
+//        Log.d("TAGcache1", "saveData: "+titles.toString())
+//        Log.d("TAGcache1", "saveData: "+imgs.toString())
+//        Log.d("TAGcache1", "saveData: "+urls.toString())
+//        Log.d("TAGcache1", "saveData: "+s)
+//        Log.d("TAGcache1", "saveData: ===========")
 
         val imageList = mutableListOf<Image>()
 
